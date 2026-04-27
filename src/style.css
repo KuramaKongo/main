@@ -19,7 +19,22 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: radial-gradient(circle at 20% 30%, #0a0f1a, #03060c);
+  background-image: url('/src/assets/1776974407490.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+#app {
+  max-width: 1400px;
+  margin: 0 auto;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
 }
 
 a {
@@ -45,6 +60,7 @@ button {
   cursor: pointer;
   transition: all 0.25s;
 }
+
 button:hover {
   background-color: #00f3ff;
   color: #0a0f1a;
@@ -58,19 +74,11 @@ button:hover {
   backdrop-filter: blur(4px);
 }
 
-#app {
-  max-width: 1400px;
-  margin: 0 auto;
-  text-align: center;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
 ::-webkit-scrollbar {
   width: 6px;
   background: #0a0f1a;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #00f3ff;
   border-radius: 3px;
