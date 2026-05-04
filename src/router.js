@@ -1,12 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import main from './components/main.vue'
-import anime from './components/anime.vue'
-import manga from './components/manga.vue'
+import Home from "./components/Home.vue";       
+import anime from "./components/Anime.vue";           
+import manga from "./components/Manga.vue";          
+import Enter from "./components/Enter.vue";           
+import Register from "./components/Register.vue";     
 
 const routes = [
-    { path: '/', component: main, name: 'main' },
+    { path: '/', component: Home, name: 'home' },
     { path: '/anime', component: anime, name: 'anime' },
     { path: '/manga', component: manga, name: 'manga' },
+    { path: '/enter', component: Enter, name: 'enter' },
+    { path: '/register', component: Register, name: 'register' },
 ]
 
 export const router = createRouter({
