@@ -9,6 +9,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/" class="cyber-link">Главная</RouterLink>
       <RouterLink to="/anime" class="cyber-link">Аниме</RouterLink>
       <RouterLink to="/manga" class="cyber-link">Манга</RouterLink>
+      <RouterLink to="/enter" class="cyber-link">Вход</RouterLink>
     </nav>
   </div>
   <div class="content">
