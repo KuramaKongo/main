@@ -9,6 +9,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/" class="cyber-link">Главная</RouterLink>
       <RouterLink to="/anime" class="cyber-link">Аниме</RouterLink>
       <RouterLink to="/manga" class="cyber-link">Манга</RouterLink>
+      <RouterLink to="/profile" class="cyber-link">Профиль</RouterLink>
       <RouterLink to="/enter" class="cyber-link">Вход</RouterLink>
     </nav>
   </div>
@@ -25,32 +26,36 @@ import { RouterLink, RouterView } from 'vue-router'
   padding: 1rem;
   margin-bottom: 2rem;
   box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
 .neon-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   text-transform: uppercase;
   letter-spacing: 4px;
   color: #00f3ff;
-  text-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 20px #00f3ff;
-  margin-bottom: 1rem;
+  text-shadow: 0 0 5px #00f3ff;
+  margin: 0;
 }
+
+nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
 .cyber-link {
-  color: #00f3ff;
+  color: #fff;
   text-decoration: none;
-  margin: 0 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid #00f3ff;
-  border-radius: 4px;
-  transition: all 0.3s;
-  display: inline-block;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  transition: 0.3s;
 }
-.cyber-link:hover {
-  background: #00f3ff;
-  color: #000;
-  box-shadow: 0 0 15px #00f3ff;
-  text-shadow: none;
-}
-.content {
-  padding: 1rem;
+
+.cyber-link:hover,
+.router-link-active {
+  color: #00f3ff;
+  text-shadow: 0 0 10px #00f3ff;
 }
 </style>
