@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from "./components/Home.vue";       
 import anime from "./components/Anime.vue";           
 import manga from "./components/Manga.vue";          
-import Enter from "./components/Enter.vue";           
+import Enter from "./components/enter.vue";           
 import Register from "./components/Register.vue";     
 import Profile from "./components/Profile.vue"; // Наш новый компонент
 
