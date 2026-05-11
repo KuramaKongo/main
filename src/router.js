@@ -3,8 +3,8 @@ import Home from "./components/Home.vue";
 import anime from "./components/Anime.vue";           
 import manga from "./components/Manga.vue";          
 import Enter from "./components/enter.vue";           
-import Register from "./components/Register.vue";     
-import Profile from "./components/Profile.vue"; // Наш новый компонент
+import Register from "./components/register.vue";     
+import Profile from "./components/profile.vue"; // Наш новый компонент
 
 const routes = [
     { path: '/', component: Home, name: 'home' },
