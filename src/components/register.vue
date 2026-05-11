@@ -15,287 +15,212 @@ const handleRegister = () => {
   errorMsg.value = ''
   successMsg.value = ''
 
-  // Проверки
   if (!login.value.trim() || !email.value.trim() || !password.value.trim() || !confirmPassword.value.trim()) {
     errorMsg.value = 'ВСЕ ПОЛЯ ОБЯЗАТЕЛЬНЫ ДЛЯ ЗАПОЛНЕНИЯ'
     return
   }
 
-  if (login.value.length < 3) {
-    errorMsg.value = 'ЛОГИН ДОЛЖЕН БЫТЬ НЕ МЕНЕЕ 3 СИМВОЛОВ'
-    return
-  }
-
-  if (!email.value.includes('@') || !email.value.includes('.')) {
-    errorMsg.value = 'НЕКОРРЕКТНЫЙ EMAIL'
-    return
-  }
-
-  if (password.value.length < 4) {
-    errorMsg.value = 'ПАРОЛЬ ДОЛЖЕН БЫТЬ НЕ МЕНЕЕ 4 СИМВОЛОВ'
-    return
-  }
-
-  if (password.value !== confirmPassword.value) {
-    errorMsg.value = 'ПАРОЛИ НЕ СОВПАДАЮТ'
-    return
-  }
-
-  // Проверка существующего акк
   const users = JSON.parse(localStorage.getItem('cyberanime_users') || '[]')
-  const existingUser = users.find(u => u.login === login.value || u.email === email.value)
 
-  if (existingUser) {
-    errorMsg.value = 'ПОЛЬЗОВАТЕЛЬ С ТАКИМ ЛОГИНОМ ИЛИ EMAIL УЖЕ СУЩЕСТВУЕТ'
+  if (users.find(u => u.login === login.value)) {
+    errorMsg.value = 'ЭТОТ НИКНЕЙМ УЖЕ ЗАНЯТ СИСТЕМОЙ'
     return
   }
 
-  // Создание нового пользовательского акк
   const newUser = {
+    id: Date.now(),
     login: login.value,
     email: email.value,
     password: password.value,
-    regDate: new Date().toLocaleDateString('ru-RU'),
-    avatar: '⬡'
+    role: 'user',
+    regDate: new Date().toLocaleDateString(),
+    avatar: '⬢',
+    anime_lists: { planned: [], watching: [], completed: [], dropped: [], favorites: [] },
+    manga_lists: { planned: [], reading: [], completed: [], dropped: [], favorites: [] }
   }
 
   users.push(newUser)
   localStorage.setItem('cyberanime_users', JSON.stringify(users))
 
-  successMsg.value = 'РЕГИСТРАЦИЯ УСПЕШНА! ПЕРЕНАПРАВЛЕНИЕ...'
-  
-  // Перенаправление на страницу входа
+  successMsg.value = 'ДОСТУП РАЗРЕШЕН. ИНИЦИАЛИЗАЦИЯ...'
+
   setTimeout(() => {
     router.push('/enter')
-  }, 2000)
-}
-
-const goToLogin = () => {
-  router.push('/enter')
+  }, 1500)
 }
 </script>
 
 <template>
-  <div class="auth-container">
-    <div class="auth-box">
-      <h2 class="neon-title">▸ РЕГИСТРАЦИЯ</h2>
+  <div class="register-page">
+    <div class="register-box">
+      <div class="scanline"></div>
+
+      <h2 class="neon-text">РЕГИСТРАЦИЯ В СЕТИ</h2>
 
       <div class="input-group">
-        <label class="label">ЛОГИН</label>
-        <input 
-          v-model="login" 
-          type="text" 
-          class="cyber-input" 
-          placeholder="Придумай логин..."
-        />
+        <label>ИМЯ_ПОЛЬЗОВАТЕЛЯ</label>
+        <input v-model="login" type="text" placeholder="Введите ник..." />
       </div>
 
       <div class="input-group">
-        <label class="label">EMAIL</label>
-        <input 
-          v-model="email" 
-          type="email" 
-          class="cyber-input" 
-          placeholder="neon@cyber.matrix"
-        />
+        <label>ЭЛЕКТРОННАЯ_ПОЧТА</label>
+        <input v-model="email" type="email" placeholder="cyber@mail.ru" />
       </div>
 
       <div class="input-group">
-        <label class="label">ПАРОЛЬ</label>
-        <input 
-          v-model="password" 
-          type="password" 
-          class="cyber-input" 
-          placeholder="Минимум 4 символа"
-        />
+        <label>ПАРОЛЬ</label>
+        <input v-model="password" type="password" placeholder="********" />
       </div>
 
       <div class="input-group">
-        <label class="label">ПОДТВЕРДИ ПАРОЛЬ</label>
-        <input 
-          v-model="confirmPassword" 
-          type="password" 
-          class="cyber-input" 
-          placeholder="Повтори пароль"
-        />
+        <label>ПОДТВЕРЖДЕНИЕ</label>
+        <input v-model="confirmPassword" type="password" placeholder="********" />
       </div>
 
       <p v-if="errorMsg" class="error-msg">{{ errorMsg }}</p>
       <p v-if="successMsg" class="success-msg">{{ successMsg }}</p>
 
-      <button class="cyber-btn" @click="handleRegister">
-        ▸ СОЗДАТЬ АККАУНТ
+      <button @click="handleRegister" class="cyber-btn">
+        <span class="btn-content">СОЗДАТЬ АККАУНТ</span>
       </button>
 
-      <p class="switch-text">
-        Уже есть аккаунт? 
-        <span class="switch-link" @click="goToLogin">Войти</span>
-      </p>
+      <div class="switch-text">
+        УЖЕ В СИСТЕМЕ? <span @click="router.push('/enter')" class="switch-link">ВХОД</span>
+      </div>
     </div>
-
-    <div class="decor-grid"></div>
-    <div class="scanline"></div>
   </div>
 </template>
 
 <style scoped>
-.auth-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  position: relative;
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
 }
 
-.auth-box {
-  background: rgba(10, 15, 26, 0.9);
-  border: 1px solid #ff00de55;
-  padding: 2rem;
+.register-box {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #ff00de;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 0 25px rgba(255, 0, 222, 0.2);
   position: relative;
   overflow: hidden;
+  /* Чтобы полоска не вылетала за края */
 }
 
-.auth-box::before {
-  content: '';
+/* Анимация движущейся полоски */
+.scanline {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 0, 222, 0.5);
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #ff00de, transparent);
-  animation: scanline 2s linear infinite;
+  z-index: 5;
+  box-shadow: 0 0 10px #ff00de;
+  animation: scan 4s linear infinite;
 }
 
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(500px); }
+@keyframes scan {
+  0% {
+    top: 0;
+  }
+
+  100% {
+    top: 100%;
+  }
 }
 
-.neon-title {
-  font-size: 1.5rem;
+.neon-text {
   color: #ff00de;
-  text-shadow: 0 0 5px #ff00de, 0 0 10px #ff00de;
-  text-align: center;
+  text-shadow: 0 0 10px #ff00de;
   margin-bottom: 2rem;
+  font-size: 1.4rem;
   letter-spacing: 2px;
 }
 
 .input-group {
-  margin-bottom: 1.5rem;
+  text-align: left;
+  margin-bottom: 1.2rem;
 }
 
-.label {
+.input-group label {
   display: block;
+  font-size: 0.75rem;
   color: #ff00de;
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-  letter-spacing: 1px;
-  opacity: 0.8;
+  margin-bottom: 0.4rem;
+  font-weight: bold;
 }
 
-.cyber-input {
+.input-group input {
   width: 100%;
-  padding: 0.75rem;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid #ff00de55;
-  color: #ff00de;
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
-  font-size: 1rem;
+  background: rgba(255, 0, 222, 0.05);
+  border: 1px solid rgba(255, 0, 222, 0.5);
+  padding: 0.7rem;
+  color: #fff;
+  font-family: 'Share Tech Mono', monospace;
   outline: none;
-  transition: all 0.3s;
+  transition: 0.3s;
 }
 
-.cyber-input:focus {
+.input-group input:focus {
   border-color: #ff00de;
   box-shadow: 0 0 10px rgba(255, 0, 222, 0.3);
-}
-
-.cyber-input::placeholder {
-  color: #ff00de55;
+  background: rgba(255, 0, 222, 0.1);
 }
 
 .cyber-btn {
   width: 100%;
-  padding: 0.75rem;
+  padding: 1rem;
   background: transparent;
   border: 1px solid #ff00de;
   color: #ff00de;
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
-  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s;
-  letter-spacing: 1px;
-  margin-top: 0.5rem;
+  position: relative;
+  transition: 0.4s;
+  overflow: hidden;
+  margin-top: 1rem;
 }
 
 .cyber-btn:hover {
   background: #ff00de;
-  color: #0a0f1a;
-  box-shadow: 0 0 15px #ff00de;
+  color: #000;
+  box-shadow: 0 0 20px #ff00de;
 }
 
 .error-msg {
   color: #ff4444;
-  text-align: center;
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
-  text-shadow: 0 0 5px #ff4444;
-  animation: blink 1s infinite;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
 }
 
 .success-msg {
   color: #00ff88;
-  text-align: center;
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
-  text-shadow: 0 0 5px #00ff88;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
 }
 
 .switch-text {
-  text-align: center;
   margin-top: 1.5rem;
-  color: #ff00de;
-  opacity: 0.7;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  color: #fff;
+  opacity: 0.8;
 }
 
 .switch-link {
-  color: #00f3ff;
+  color: #ff00de;
   cursor: pointer;
   text-decoration: underline;
-  transition: all 0.3s;
+  transition: 0.3s;
 }
 
 .switch-link:hover {
-  text-shadow: 0 0 10px #00f3ff;
-}
-
-.decor-grid {
-  position: absolute;
-  bottom: -20px;
-  right: -20px;
-  width: 100px;
-  height: 100px;
-  border: 1px solid #ff00de33;
-  pointer-events: none;
-}
-
-.scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: rgba(255, 0, 222, 0.3);
-  animation: scan 3s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes scan {
-  0% { top: 0; }
-  100% { top: 100%; }
+  text-shadow: 0 0 8px #ff00de;
 }
 </style>
