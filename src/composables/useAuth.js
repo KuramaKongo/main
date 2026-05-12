@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 const STORAGE_KEY = 'cyberanime_users'
 const CURRENT_USER_KEY = 'cyberanime_current_user'
 
+// Функция загрузки пользователей
 const loadUsers = () => {
   const saved = localStorage.getItem(STORAGE_KEY)
   if (saved) {
@@ -11,9 +12,35 @@ const loadUsers = () => {
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Ошибка загрузки пользователей:', e)
+    }
   }
-  return []
+  // Создаем пользователей по умолчанию если нет
+  const defaultUsers = [
+    {
+      id: 1,
+      email: 'admin@gmail.com',
+      password: 'admin123',
+      name: 'Администратор',
+      role: 'admin',
+      blocked: false,
+      createdAt: new Date().toISOString(),
+      avatar: '⬡'
+    },
+    {
+      id: 2,
+      email: 'user@gmail.com',
+      password: 'user123',
+      name: 'КиберЮзер',
+      role: 'user',
+      blocked: false,
+      createdAt: new Date().toISOString(),
+      avatar: '⬢'
+    }
+  ]
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultUsers))
+  return defaultUsers
 }
 
 const users = ref(loadUsers())
@@ -46,7 +73,12 @@ export function useAuth() {
   const isAdmin = computed(() => currentUser.value?.role === 'admin')
 
   function login(email, password) {
+    console.log('Попытка входа:', email, password)
+    console.log('Все пользователи:', users.value)
+    
     const user = users.value.find(u => u.email === email.trim() && u.password === password)
+    
+    console.log('Найден пользователь:', user)
     
     if (!user) {
       return { success: false, error: 'Неверный email или пароль' }
@@ -58,6 +90,7 @@ export function useAuth() {
     
     currentUser.value = { ...user }
     saveCurrentUser()
+    console.log('Вход выполнен!', currentUser.value)
     return { success: true }
   }
 
